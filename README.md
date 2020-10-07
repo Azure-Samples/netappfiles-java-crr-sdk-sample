@@ -10,7 +10,7 @@ description: "This project demonstrates how to use Java with NetApp Files SDK fo
 
 # Azure NetAppFiles Cross-Region Replication (CRR) SDK NFS 4.1 Sample Java
 
-This project demonstrates how to deploy a cross-region replication with enabled with NFS 4.1 protocol volume using Java and Azure NetApp Files SDK.
+This project demonstrates how to deploy a volume based on NFSv4.1 protocol with cross-region replication enabled using Java and Azure NetApp Files SDK.
 
 In this sample application we perform the following operations:
 
