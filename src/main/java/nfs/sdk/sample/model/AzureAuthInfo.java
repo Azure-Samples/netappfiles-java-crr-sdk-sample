@@ -1,4 +1,4 @@
-package nfs.model;
+package nfs.sdk.sample.model;
 // Copyright (c) Microsoft and contributors.  All rights reserved.
 //
 // This source code is licensed under the MIT license found in the

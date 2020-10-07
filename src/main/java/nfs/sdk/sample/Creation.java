@@ -1,4 +1,4 @@
-package nfs;
+package nfs.sdk.sample;
 
 import com.microsoft.azure.management.netapp.v2019_11_01.*;
 import com.microsoft.azure.management.netapp.v2019_11_01.implementation.AzureNetAppFilesManagementClientImpl;
@@ -18,7 +18,7 @@ public class Creation {
      * @param resourceGroupName Resource Group of ANF resource
      * @param anfAccountName ANF account name
      * @param location ANF resource location / region
-     * @return
+     * @return ANF account inner object
      */
     public static CompletableFuture<Observable<NetAppAccountInner>> createOrUpdateAccountAsync(AzureNetAppFilesManagementClientImpl anfClient, String resourceGroupName, String anfAccountName, String location)
     {
@@ -36,7 +36,7 @@ public class Creation {
      * @param capacityPoolName ANF capacity Pool name
      * @param serviceLevel ANF capacity pool service level {Premium or Standard}
      * @param location ANF resource location / region
-     * @return
+     * @return ANF capacity pool inner object
      */
     public static CompletableFuture<Observable<CapacityPoolInner>> createOrUpdateCapacityPoolAsync(AzureNetAppFilesManagementClientImpl anfClient, String resourceGroupName, String anfAccountName, String capacityPoolName, String serviceLevel, long capacityPoolSize, String location)
     {
@@ -60,33 +60,33 @@ public class Creation {
      * @param serviceLevel ANF capacity pool service level {Premium or Standard}
      * @param subnetId Subnet Id
      * @param location ANF resource location / region
-     * @return
+     * @return ANF volume inner object
      */
     public static CompletableFuture<Observable<VolumeInner>> createOrUpdateVolumeAsync(AzureNetAppFilesManagementClientImpl anfClient, String resourceGroupName, String anfAccountName,String capacityPoolName, String volumeName, long volumeSize, String serviceLevel, String subnetId, String location)
     {
         List<ExportPolicyRule> ruleList = new ArrayList<>();
         ruleList.add(new ExportPolicyRule()
-        .withAllowedClients("0.0.0.0")
-        .withRuleIndex(1)
-        .withUnixReadWrite(true)
-        .withUnixReadOnly(false)
-        .withCifs(false)
-        .withNfsv3(false)
-        .withNfsv41(true));
+                .withAllowedClients("0.0.0.0")
+                .withRuleIndex(1)
+                .withUnixReadWrite(true)
+                .withUnixReadOnly(false)
+                .withCifs(false)
+                .withNfsv3(false)
+                .withNfsv41(true));
 
         VolumePropertiesExportPolicy exportPolicy = new VolumePropertiesExportPolicy().withRules(ruleList);
 
         List<String> protocols = new ArrayList<>();
         protocols.add("NFSv4.1");
 
-        VolumeInner volumeInner = new VolumeInner();
-        volumeInner.withCreationToken(volumeName);
-        volumeInner.withExportPolicy(exportPolicy);
-        volumeInner.withServiceLevel(ServiceLevel.fromString(serviceLevel));
-        volumeInner.withSubnetId(subnetId);
-        volumeInner.withUsageThreshold(volumeSize);
-        volumeInner.withProtocolTypes(protocols);
-        volumeInner.withLocation(location);
+        VolumeInner volumeInner = (VolumeInner) new VolumeInner()
+                .withCreationToken(volumeName)
+                .withExportPolicy(exportPolicy)
+                .withServiceLevel(ServiceLevel.fromString(serviceLevel))
+                .withSubnetId(subnetId)
+                .withUsageThreshold(volumeSize)
+                .withProtocolTypes(protocols)
+                .withLocation(location);
 
         Observable<VolumeInner> volumeInnerObservable = anfClient.volumes().createOrUpdateAsync(resourceGroupName, anfAccountName, capacityPoolName, volumeName, volumeInner);
         return CompletableFuture.completedFuture(volumeInnerObservable);
@@ -103,7 +103,7 @@ public class Creation {
      * @param serviceLevel ANF capacity pool service level {Premium or Standard}
      * @param subnetId Subnet Id
      * @param location ANF resource location / region
-     * @return
+     * @return ANF volume inner object
      */
     public static CompletableFuture<Observable<VolumeInner>> createOrUpdateDataReplicationVolumeAsync(AzureNetAppFilesManagementClientImpl anfClient, String resourceGroupName, String anfAccountName,String capacityPoolName, String volumeName, long volumeSize, String serviceLevel, String subnetId, String location, String primaryVolumeId, String primaryVolumeLocation)
     {
@@ -131,11 +131,11 @@ public class Creation {
         volumeInner.withProtocolTypes(protocols);
         volumeInner.withLocation(location);
         volumeInner.withDataProtection(new VolumePropertiesDataProtection()
-        .withReplication(new ReplicationObject()
-        .withEndpointType(EndpointType.DST)
-        .withRemoteVolumeRegion(primaryVolumeLocation)
-        .withRemoteVolumeResourceId(primaryVolumeId)
-        .withReplicationSchedule(ReplicationSchedule.HOURLY)));
+                .withReplication(new ReplicationObject()
+                .withEndpointType(EndpointType.DST)
+                .withRemoteVolumeRegion(primaryVolumeLocation)
+                .withRemoteVolumeResourceId(primaryVolumeId)
+                .withReplicationSchedule(ReplicationSchedule.HOURLY)));
 
         Observable<VolumeInner> volumeInnerObservable = anfClient.volumes().createOrUpdateAsync(resourceGroupName, anfAccountName, capacityPoolName, volumeName, volumeInner);
         return CompletableFuture.completedFuture(volumeInnerObservable);
@@ -149,7 +149,7 @@ public class Creation {
      * @param capacityPoolName ANF capacity pool name
      * @param primaryVolumeName ANF volume name
      * @param dataReplicationVolumeId Destination data replication volume Id
-     * @return
+     * @return void
      */
     public static CompletableFuture<Observable<Void>> authorizeSourceReplicationAsync(AzureNetAppFilesManagementClientImpl anfClient, String resourceGroupName, String anfAccountName, String capacityPoolName, String primaryVolumeName,String dataReplicationVolumeId)
     {

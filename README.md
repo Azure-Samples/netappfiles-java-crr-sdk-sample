@@ -24,10 +24,7 @@ In this sample application we perform the following operations:
 		| Secondary NFS v.1 Data Replication Volume with referencing to the primary volume Resource ID
 			
  * Authorize Source volume with Desitnation Volume Resource ID
- 
- * Finally, the clean up process takes place (not enabled by default, please change the variable shouldCleanUp to true at main file if you want the clean up code to take a place),deleting all resources in the reverse order following the hierarchy otherwise we can't remove resources that have nested resources still live. You will also notice that the clean up process uses a function called WaitForNoANFResource, at this moment this is required so we can workaround a current ARM behavior of reporting that the object was deleted when in fact its deletion is still in progress.
-
-
+  
 If you don't already have a Microsoft Azure subscription, you can get a FREE trial account [here](http://go.microsoft.com/fwlink/?LinkId=330212).
 
 ## Prerequisites
@@ -68,6 +65,7 @@ If you don't already have a Microsoft Azure subscription, you can get a FREE tri
 
 This sample project is dedicated to demonstrate how to enable cross-region replication in Azure NetApp Files for a NFS v4.1 enabled volume, similar to other examples, the authentication method is based on a service principal, this project will create two ANF Accounts in different regions with capacity pool. A single volume using Premium service level tier in the Source ANF, and Data Replication Volume with Standard service level tier in the destination region. 
 
+The cleanup process takes place (not enabled by default, please change the variable shouldCleanUp to true at main file if you want the clean up code to take a place),deleting all resources in the reverse order following the hierarchy otherwise we can't remove resources that have nested resources still live. You will also notice that the clean up process uses a function called WaitForNoANFResource, at this moment this is required so we can workaround a current ARM behavior of reporting that the object was deleted when in fact its deletion is still in progress.
 # How the project is structured
 
 The following table describes all files within this solution:
@@ -77,10 +75,10 @@ The following table describes all files within this solution:
 | Root\\^           | main.java                   | Reads configuration, authenticates, executes all operations
 | Root\\^           | Creation.java               | Class that contains all resource creation loops, following the hierarchy logic in order to successfully deploy Azure NetApp Files resources
 | Root\\^           | Cleanup.java                | Class that performs cleanup of all artifacts that were created during this sample application. Its call is commented out by default in main.java
-| Root\\^\nfs.common    | CommonSdk.java              | Class dedicated to nfs.common operations related to ANF's SDK
-| Root\\^\nfs.common    | ResourceUriUtils.java       | Class that exposes a few methods that help parsing Uri's, building new Uri's, or getting a resource name from a Uri, etc
-| Root\\^\nfs.common    | ServiceCredentialsAuth.java | A small support class for extracting and creating credentials from a File
-| Root\\^\nfs.common    | Utils.java                  | Class that exposes methods that help with getting the configuration object, byte conversion, etc
+| Root\\^\nfs.sdk.sample.common    | CommonSdk.java              | Class dedicated to nfs.sdk.sample.common operations related to ANF's SDK
+| Root\\^\nfs.sdk.sample.common    | ResourceUriUtils.java       | Class that exposes a few methods that help parsing Uri's, building new Uri's, or getting a resource name from a Uri, etc
+| Root\\^\nfs.sdk.sample.common    | ServiceCredentialsAuth.java | A small support class for extracting and creating credentials from a File
+| Root\\^\nfs.sdk.sample.common    | Utils.java                  | Class that exposes methods that help with getting the configuration object, byte conversion, etc
 | Root\\^\model     | AzureAuthInfo.java          | POJO class to hold authentication information
 >\\^ == src/main/java/sdk/sample                                                               |
 

@@ -1,4 +1,4 @@
-package nfs;
+package nfs.sdk.sample;
 
 import com.ea.async.Async;
 import com.microsoft.azure.management.netapp.v2019_11_01.implementation.AzureNetAppFilesManagementClientImpl;
