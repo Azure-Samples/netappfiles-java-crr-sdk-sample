@@ -5,12 +5,12 @@ languages:
 products:
 - azure
 - azure-netapp-files
-description: "This project demonstrates how to use Java with NetApp Files SDK for Microsoft.NetApp resource provider to deploy a cross-region replication for NFS 4.1 Volume."
+description: "This project demonstrates how to use Java with NetApp Files SDK for Microsoft.NetApp resource provider to enable cross-region replication on NFS 4.1 Volume."
 ---
 
 # Azure NetAppFiles Cross-Region Replication (CRR) SDK NFS 4.1 Sample Java
 
-This project demonstrates how to deploy a cross-region replication with enabled with NFS 4.1 protocol volume using Java and Azure NetApp Files SDK.
+This project demonstrates how to deploy a volume based on NFSv4.1 protocol with cross-region replication enabled using Java and Azure NetApp Files SDK.
 
 In this sample application we perform the following operations:
 
@@ -63,7 +63,7 @@ If you don't already have a Microsoft Azure subscription, you can get a FREE tri
 
 # What is anf-java-crr-sdk-nfs4.1-sample.dll doing? 
 
-This sample project is dedicated to demonstrate how to enable cross-region replication in Azure NetApp Files for a NFS v4.1 enabled volume, similar to other examples, the authentication method is based on a service principal, this project will create two ANF Accounts in different regions with capacity pool. A single volume using Premium service level tier in the Source ANF, and Data Replication Volume with Standard service level tier in the destination region. 
+This sample project is dedicated to demonstrate how to enable cross-region replication in Azure NetApp Files for an NFS v4.1 enabled volume, similar to other examples, the authentication method is based on a service principal, this project will create two ANF Accounts in different regions with capacity pool. A single volume using Premium service level tier in the Source ANF, and Data Replication Volume with Standard service level tier in the destination region. 
 
 The cleanup process takes place (not enabled by default, please change the variable shouldCleanUp to true at main file if you want the clean up code to take a place),deleting all resources in the reverse order following the hierarchy otherwise we can't remove resources that have nested resources still live. You will also notice that the clean up process uses a function called WaitForNoANFResource, at this moment this is required so we can workaround a current ARM behavior of reporting that the object was deleted when in fact its deletion is still in progress.
 # How the project is structured
