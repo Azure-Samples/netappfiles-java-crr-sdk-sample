@@ -5,7 +5,7 @@ languages:
 products:
 - azure
 - azure-netapp-files
-description: "This project demonstrates how to use Java with NetApp Files SDK for Microsoft.NetApp resource provider to deploy a cross-region replication for NFS 4.1 Volume."
+description: "This project demonstrates how to use Java with NetApp Files SDK for Microsoft.NetApp resource provider to enable cross-region replication on NFS 4.1 Volume."
 ---
 
 # Azure NetAppFiles Cross-Region Replication (CRR) SDK NFS 4.1 Sample Java
