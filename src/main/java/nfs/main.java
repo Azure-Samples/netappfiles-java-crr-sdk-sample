@@ -1,4 +1,4 @@
-package main;
+package nfs;
 
 import com.ea.async.Async;
 import com.microsoft.azure.management.netapp.v2019_11_01.implementation.AzureNetAppFilesManagementClientImpl;
@@ -50,11 +50,12 @@ public class main {
         Utils.displayConsoleAppHeader();
         try {
             Async.init();
-            runAsync().get();
+            runAsync();
             Utils.writeConsoleMessage("ANF CRR Java sample application successfully completed");
         } catch (Exception e) {
             Utils.writeErrorMessage(e.getMessage());
         }
+        System.exit(0);
     }
 
     private static CompletableFuture<Void> runAsync() throws Exception {

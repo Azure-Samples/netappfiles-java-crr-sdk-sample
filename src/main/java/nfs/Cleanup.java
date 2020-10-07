@@ -1,4 +1,4 @@
-package main;
+package nfs;
 
 import com.microsoft.azure.management.netapp.v2019_11_01.implementation.AzureNetAppFilesManagementClientImpl;
 import rx.Observable;
