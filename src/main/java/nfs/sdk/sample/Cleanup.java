@@ -14,7 +14,7 @@ public class Cleanup {
      * @param destinationCapacityPoolName Destination ANF capacity pool name
      * @param destinationVolumeName Destination ANF volume name
      */
-    public static CompletableFuture<Observable<Void>> deleteReplicationOnDestinationAsync(AzureNetAppFilesManagementClientImpl anfClient, String destinationResourceGroupName, String destinationAnfAccountName, String destinationCapacityPoolName, String destinationVolumeName)
+    public static CompletableFuture<Observable<Void>> deleteDataReplicationVolumeAsync(AzureNetAppFilesManagementClientImpl anfClient, String destinationResourceGroupName, String destinationAnfAccountName, String destinationCapacityPoolName, String destinationVolumeName)
     {
         anfClient.volumes().deleteReplicationAsync(destinationResourceGroupName,destinationAnfAccountName,destinationCapacityPoolName,destinationVolumeName);
         return CompletableFuture.completedFuture(null);

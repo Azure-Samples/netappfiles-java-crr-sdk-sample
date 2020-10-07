@@ -132,7 +132,7 @@ public class main {
         if(shouldCleanUp)
         {
             //Delete replication connection
-            await(Cleanup.deleteReplicationOnDestinationAsync(anfClient,secondaryResourceGroupName,secondaryAnfAccountName, secondaryCapacityPoolName, secondaryVolumeName));
+            await(Cleanup.deleteDataReplicationVolumeAsync(anfClient,secondaryResourceGroupName,secondaryAnfAccountName, secondaryCapacityPoolName, secondaryVolumeName));
 
             // Delete secondary ANF resources
             await(Cleanup.deleteAnfVolumeAsync(anfClient, secondaryResourceGroupName, secondaryAnfAccountName, secondaryCapacityPoolName, secondaryVolumeName));
