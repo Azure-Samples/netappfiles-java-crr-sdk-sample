@@ -9,4 +9,4 @@ target/
 .idea
 *.iml
 src/out
-
+src/main/resources/log4j.properties
