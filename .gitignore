@@ -1,6 +1,9 @@
 # Specific files to ignore since they might contain sensitive information
 azureauth*.json
 
+# Log file
+*.log
+
 # Maven generated classes and sources
 target/
 
@@ -9,4 +12,3 @@ target/
 .idea
 *.iml
 src/out
-src/main/resources/log4j.properties
