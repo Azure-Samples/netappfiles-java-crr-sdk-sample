@@ -12,4 +12,4 @@ target/
 .idea
 *.iml
 src/out
-resources/
+src/resources/
