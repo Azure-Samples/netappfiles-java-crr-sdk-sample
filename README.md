@@ -21,9 +21,9 @@ In this sample application we perform the following operations:
 		
  * Secondary ANF Account
 	| Secondary Capacity pool
-		| Secondary NFS v.1 Data Replication Volume with referencing to the primary volume Resource ID
+		| Secondary NFS v.1 Data Protection Volume with referencing to the primary volume Resource ID
 			
- * Authorize Source volume with Desitnation Volume Resource ID
+ * Authorize Primary volume with Secondary Volume Resource ID
   
 If you don't already have a Microsoft Azure subscription, you can get a FREE trial account [here](http://go.microsoft.com/fwlink/?LinkId=330212).
 
@@ -31,6 +31,7 @@ If you don't already have a Microsoft Azure subscription, you can get a FREE tri
 
 1. Azure Subscription
 1. Subscription needs to be enabled for Azure NetApp Files. For more information, please refer to [this](https://docs.microsoft.com/azure/azure-netapp-files/azure-netapp-files-register#waitlist) document.
+1. Request preview access for Azure NetApp Files cross-region replication. For more information, please refer to [this](https://docs.microsoft.com/en-us/azure/azure-netapp-files/cross-region-replication-create-peering) document.
 1. This project is built upon Maven, which has to be installed in order to run the sample. Instructions on installing Maven can be found on their website [here](https://maven.apache.org/install.html)
 1. The sample is written in Java 11. The Maven compiler's target Java version is therefore Java 11, and the JAVA_HOME environment variable must be set to Java 11 or a newer version
 1. Resource Group created
@@ -65,7 +66,7 @@ If you don't already have a Microsoft Azure subscription, you can get a FREE tri
 
 # What is anf-java-crr-sdk-nfs4.1-sample.dll doing? 
 
-This sample project is dedicated to demonstrate how to enable cross-region replication in Azure NetApp Files for an NFS v4.1 enabled volume, similar to other examples, the authentication method is based on a service principal, this project will create two ANF Accounts in different regions with capacity pool. A single volume using Premium service level tier in the Source ANF, and Data Replication Volume with Standard service level tier in the destination region. 
+This sample project is dedicated to demonstrate how to enable cross-region replication in Azure NetApp Files for an NFS v4.1 enabled volume, similar to other examples, the authentication method is based on a service principal, this project will create two ANF Accounts in different regions with capacity pool. A single volume using Premium service level tier in the Primary ANF, and Data Protection Volume with Standard service level tier in the secondary region. 
 
 >Note: The cleanup execution is disabled by default. If you want to run this end to end with the cleanup, please
 - mvn install>change value of boolean variable 'shouldCleanUp' in main.java
