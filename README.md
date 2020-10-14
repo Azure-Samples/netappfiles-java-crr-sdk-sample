@@ -1,7 +1,7 @@
 ---
 page_type: sample
 languages:
-- Java
+- java
 products:
 - azure
 - azure-netapp-files
