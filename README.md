@@ -113,5 +113,5 @@ Sample output
 * [Azure NetApp Files - Cross-Region Replication] (https://docs.microsoft.com/en-us/azure/azure-netapp-files/cross-region-replication-introduction)
 * [Azure Cloud Shell](https://docs.microsoft.com/azure/cloud-shell/quickstart)
 * [Azure NetApp Files documentation](https://docs.microsoft.com/azure/azure-netapp-files/)
-* [Download Azure SDKs](https://azure.microsoft.com/downloads/)
+* [Download Azure SDKs](https://azure.microsoft.com/downloads/)  
  
