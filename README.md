@@ -32,7 +32,7 @@ If you don't already have a Microsoft Azure subscription, you can get a FREE tri
 1. Azure Subscription
 1. Subscription needs to be enabled for Azure NetApp Files. For more information, please refer to [this](https://docs.microsoft.com/azure/azure-netapp-files/azure-netapp-files-register#waitlist) document.
 1. Request preview access for Azure NetApp Files cross-region replication. For more information, please refer to [this](https://docs.microsoft.com/en-us/azure/azure-netapp-files/cross-region-replication-create-peering) document.
-1. This project is built upon Maven, which has to be installed in order to run the sample. Instructions on installing Maven can be found on their website [here](https://maven.apache.org/install.html)
+1. This project is built upon Maven, which has to be installed in order to run the sample. Instructions on installing Maven can be found on their website [here](https://maven.apache.org/install.html).
 1. The sample is written in Java 11. The Maven compiler's target Java version is therefore Java 11, and the JAVA_HOME environment variable must be set to Java 11 or a newer version
 1. Resource Group created
 1. Virtual Network with a delegated subnet to Microsoft.Netapp/volumes resource. For more information, please refer to [Guidelines for Azure NetApp Files network planning](https://docs.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-network-topologies)
@@ -92,7 +92,7 @@ The following table describes all files within this solution:
 1. Clone it locally
     ```powershell
     git clone https://github.com/Azure-Samples/netappfiles-java-nfs4.1-sdk-sample.git
-    ```
+    ``` 
 1. Make sure you change the variables located at **.netappfiles-java-crr-sdk-sample\src\main\main.java at RunAsync method.**
 1. Change folder to **.\anf-java-crr-sdk-sample**
 1. Since we're using service principal authentication flow, make sure you have the **azureauth.json** and its environment variable with the path to it defined (as previously described)
@@ -105,7 +105,7 @@ The following table describes all files within this solution:
     mvn exec:java -Dexec.mainClass="sdk.sample.main"
 
 Sample output
-![e2e execution](./media/e2e-execution.png)
+![e2e execution](./media/e2e-execution.png) 
 
 # References
 
