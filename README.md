@@ -6,7 +6,7 @@ products:
 - azure
 - azure-netapp-files
 description: "This project demonstrates how to use Java with NetApp Files SDK for Microsoft.NetApp resource provider to enable cross-region replication on NFS 4.1 Volume."
----
+---  
 
 # Azure NetAppFiles Cross-Region Replication (CRR) SDK NFS 4.1 Sample Java
 
@@ -66,7 +66,7 @@ If you don't already have a Microsoft Azure subscription, you can get a FREE tri
 
 # What is anf-java-crr-sdk-nfs4.1-sample.dll doing? 
 
-This sample project is dedicated to demonstrate how to enable cross-region replication in Azure NetApp Files for an NFS v4.1 enabled volume, similar to other examples, the authentication method is based on a service principal, this project will create two ANF Accounts in different regions with capacity pool. A single volume using Premium service level tier in the Primary ANF, and Data Protection Volume with Standard service level tier in the secondary region. 
+This sample project is dedicated to demonstrate how to enable cross-region replication in Azure NetApp Files for an NFSv4.1 enabled volume, similar to other examples, the authentication method is based on a service principal, this project will create two ANF Accounts in different regions with capacity pool. A single volume using Premium service level tier in the Primary ANF, and Data Protection Volume with Standard service level tier in the secondary region. 
 
 >Note: The cleanup execution is disabled by default. If you want to run this end to end with the cleanup, please
 - mvn install>change value of boolean variable 'shouldCleanUp' in main.java
@@ -113,5 +113,5 @@ Sample output
 * [Azure NetApp Files - Cross-Region Replication] (https://docs.microsoft.com/en-us/azure/azure-netapp-files/cross-region-replication-introduction)
 * [Azure Cloud Shell](https://docs.microsoft.com/azure/cloud-shell/quickstart)
 * [Azure NetApp Files documentation](https://docs.microsoft.com/azure/azure-netapp-files/)
-* [Download Azure SDKs](https://azure.microsoft.com/downloads/)  
+* [Download Azure SDKs](https://azure.microsoft.com/downloads/)    
   
