@@ -1,10 +1,10 @@
 package nfs.sdk.sample;
 
-import com.microsoft.azure.management.netapp.v2019_11_01.*;
-import com.microsoft.azure.management.netapp.v2019_11_01.implementation.AzureNetAppFilesManagementClientImpl;
-import com.microsoft.azure.management.netapp.v2019_11_01.implementation.NetAppAccountInner;
-import com.microsoft.azure.management.netapp.v2019_11_01.implementation.CapacityPoolInner;
-import com.microsoft.azure.management.netapp.v2019_11_01.implementation.VolumeInner;
+import com.microsoft.azure.management.netapp.v2020_09_01.*;
+import com.microsoft.azure.management.netapp.v2020_09_01.implementation.AzureNetAppFilesManagementClientImpl;
+import com.microsoft.azure.management.netapp.v2020_09_01.implementation.NetAppAccountInner;
+import com.microsoft.azure.management.netapp.v2020_09_01.implementation.CapacityPoolInner;
+import com.microsoft.azure.management.netapp.v2020_09_01.implementation.VolumeInner;
 import rx.Observable;
 
 import java.util.ArrayList;
@@ -129,6 +129,7 @@ public class Creation {
         volumeInner.withSubnetId(subnetId);
         volumeInner.withUsageThreshold(volumeSize);
         volumeInner.withProtocolTypes(protocols);
+        volumeInner.withVolumeType("DataProtection");
         volumeInner.withLocation(location);
         volumeInner.withDataProtection(new VolumePropertiesDataProtection()
                 .withReplication(new ReplicationObject()

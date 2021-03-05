@@ -1,6 +1,6 @@
 package nfs.sdk.sample;
 
-import com.microsoft.azure.management.netapp.v2019_11_01.implementation.AzureNetAppFilesManagementClientImpl;
+import com.microsoft.azure.management.netapp.v2020_09_01.implementation.AzureNetAppFilesManagementClientImpl;
 import rx.Observable;
 
 import java.util.concurrent.CompletableFuture;
@@ -17,6 +17,20 @@ public class Cleanup {
     public static CompletableFuture<Observable<Void>> deleteDataReplicationVolumeAsync(AzureNetAppFilesManagementClientImpl anfClient, String destinationResourceGroupName, String destinationAnfAccountName, String destinationCapacityPoolName, String destinationVolumeName)
     {
         anfClient.volumes().deleteReplicationAsync(destinationResourceGroupName,destinationAnfAccountName,destinationCapacityPoolName,destinationVolumeName);
+        return CompletableFuture.completedFuture(null);
+    }
+
+    /**
+     * Deletes destination replication connection
+     * @param anfClient Azure NetApp Files Management Client
+     * @param destinationResourceGroupName Resource Group name of the destination ANF
+     * @param destinationAnfAccountName Destination ANF account name
+     * @param destinationCapacityPoolName Destination ANF capacity pool name
+     * @param destinationVolumeName Destination ANF volume name
+     */
+    public static CompletableFuture<Observable<Void>> breakDataReplicationAsync(AzureNetAppFilesManagementClientImpl anfClient, String destinationResourceGroupName, String destinationAnfAccountName, String destinationCapacityPoolName, String destinationVolumeName)
+    {
+        anfClient.volumes().breakReplicationAsync(destinationResourceGroupName, destinationAnfAccountName, destinationCapacityPoolName, destinationVolumeName, true);
         return CompletableFuture.completedFuture(null);
     }
 

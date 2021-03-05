@@ -3,17 +3,17 @@
 // This source code is licensed under the MIT license found in the
 // LICENSE file in the root directory of this source tree.
 
-package main.common;
+//package main.common;
+package nfs.sdk.sample.common;
 
-import com.microsoft.azure.management.netapp.v2019_11_01.CapacityPool;
-import com.microsoft.azure.management.netapp.v2019_11_01.NetAppAccount;
-import com.microsoft.azure.management.netapp.v2019_11_01.Snapshot;
-import com.microsoft.azure.management.netapp.v2019_11_01.Volume;
-import com.microsoft.azure.management.netapp.v2019_11_01.implementation.*;
+import com.microsoft.azure.management.netapp.v2020_09_01.CapacityPool;
+import com.microsoft.azure.management.netapp.v2020_09_01.NetAppAccount;
+import com.microsoft.azure.management.netapp.v2020_09_01.Snapshot;
+import com.microsoft.azure.management.netapp.v2020_09_01.Volume;
+import com.microsoft.azure.management.netapp.v2020_09_01.implementation.*;
 import javafx.concurrent.Task;
 import org.joda.time.Period;
 import rx.Observable;
-
 import java.lang.reflect.Type;
 import java.util.concurrent.CompletableFuture;
 import com.ea.async.Async;
@@ -243,8 +243,8 @@ public class ResourceUriUtils {
      * @param retries Number of times polling will be performed
      * @param anfClass Valid class types: NetAppAccountInner, CapacityPoolInner, VolumeInner, SnapshotInner
      */
-    public static <T> void waitForNoANFResource(AzureNetAppFilesManagementClientImpl anfClient, String resourceId, int intervalInSec, int retries, Class<T> anfClass) {
-
+    public static <T> void waitForNoANFResource(AzureNetAppFilesManagementClientImpl anfClient, String resourceId, int intervalInSec, int retries, Class<T> anfClass)
+    {
         for (int i = 0; i < retries; i++) {
             Utils.threadSleep(intervalInSec * 1000);
             try {
@@ -290,6 +290,92 @@ public class ResourceUriUtils {
             } catch (Exception e) {
                 Utils.writeWarningMessage(e.getMessage());
                 break;
+            }
+        }
+    }
+
+    /**
+     * Method to overload function WaitForCompleteReplicationStatus(client, string, int, int) with default values
+     * @param anfClient Azure NetApp Files Management Client
+     * @param resourceGroupName Resource Group Name
+     * @param accountName Azure NetApp Files Account name
+     * @param poolName Azure NetApp Files Capacity Pool name
+     * @param volumeName Azure NetApp Files Volume name
+     */
+    public static <T> void WaitForCompleteReplicationStatus(AzureNetAppFilesManagementClientImpl anfClient, String resourceGroupName, String accountName, String poolName, String volumeName) throws Exception
+    {
+        WaitForCompleteReplicationStatus(anfClient, resourceGroupName, accountName, poolName, volumeName, 10, 60);
+    }
+
+    /**
+     * This function checks when the current replication is complete
+     * if the resource is not found or if polling reached its maximum retries, it raise an exception.
+     * @param anfClient Azure NetApp Files Management Client
+     * @param resourceGroupName Resource Group Name
+     * @param accountName Azure NetApp Files Account name
+     * @param poolName Azure NetApp Files Capacity Pool name
+     * @param volumeName Azure NetApp Files Volume name
+     * @param intervalInSec Time in second that the function will poll to see if the resource has been deleted
+     * @param retries Number of times polling will be performed
+     */
+    public static <T> void WaitForCompleteReplicationStatus(AzureNetAppFilesManagementClientImpl anfClient, String resourceGroupName, String accountName, String poolName, String volumeName, int intervalInSec, int retries) throws Exception
+    {
+        boolean isFound = false;
+        for (int i = 0;i<retries;i++)
+        {
+            try
+            {
+                Utils.threadSleep(intervalInSec*1000);
+                Observable<ReplicationStatusInner> replicationStatus = anfClient.volumes().replicationStatusMethodAsync(resourceGroupName, accountName, poolName, volumeName);
+                if(replicationStatus.toBlocking().first().mirrorState().toString().equalsIgnoreCase("mirrored"))
+                    break;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Method to overload function WaitForBrokenReplicationStatus(client, string, int, int) with default values
+     * @param anfClient Azure NetApp Files Management Client
+     * @param resourceGroupName Resource Group Name
+     * @param accountName Azure NetApp Files Account name
+     * @param poolName Azure NetApp Files Capacity Pool name
+     * @param volumeName Azure NetApp Files Volume name
+     */
+    public static <T> void WaitForBrokenReplicationStatus(AzureNetAppFilesManagementClientImpl anfClient, String resourceGroupName, String accountName, String poolName, String volumeName) throws Exception
+    {
+        WaitForBrokenReplicationStatus(anfClient, resourceGroupName, accountName, poolName, volumeName, 10, 60);
+    }
+
+    /**
+     * This function checks when the replication is broken
+     * if the resource is not found or if polling reached its maximum retries, it raise an exception.
+     * @param anfClient Azure NetApp Files Management Client
+     * @param resourceGroupName Resource Group Name
+     * @param accountName Azure NetApp Files Account name
+     * @param poolName Azure NetApp Files Capacity Pool name
+     * @param volumeName Azure NetApp Files Volume name
+     * @param intervalInSec Time in second that the function will poll to see if the resource has been deleted
+     * @param retries Number of times polling will be performed
+     */
+    public static <T> void WaitForBrokenReplicationStatus(AzureNetAppFilesManagementClientImpl anfClient, String resourceGroupName, String accountName, String poolName, String volumeName, int intervalInSec, int retries) throws Exception
+    {
+        boolean isFound = false;
+        for (int i = 0;i<retries;i++)
+        {
+            try
+            {
+                Utils.threadSleep(intervalInSec*1000);
+                Observable<ReplicationStatusInner> replicationStatus = anfClient.volumes().replicationStatusMethodAsync(resourceGroupName, accountName, poolName, volumeName);
+                if(replicationStatus.toBlocking().first().mirrorState().toString().equalsIgnoreCase("broken"))
+                    break;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.getMessage());
             }
         }
     }

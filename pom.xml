@@ -33,9 +33,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.microsoft.azure.netapp.v2019_11_01</groupId>
+            <groupId>com.microsoft.azure.netapp.v2020_09_01</groupId>
             <artifactId>azure-mgmt-netapp</artifactId>
-            <version>1.0.0-beta-2</version>
+            <version>1.0.0-beta</version>
         </dependency>
 
         <dependency>

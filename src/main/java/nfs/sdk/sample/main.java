@@ -1,14 +1,15 @@
 package nfs.sdk.sample;
 
 import com.ea.async.Async;
-import com.microsoft.azure.management.netapp.v2019_11_01.implementation.AzureNetAppFilesManagementClientImpl;
-import com.microsoft.azure.management.netapp.v2019_11_01.implementation.CapacityPoolInner;
-import com.microsoft.azure.management.netapp.v2019_11_01.implementation.NetAppAccountInner;
-import com.microsoft.azure.management.netapp.v2019_11_01.implementation.VolumeInner;
+import com.microsoft.azure.management.netapp.v2020_09_01.AuthorizeRequest;
+import com.microsoft.azure.management.netapp.v2020_09_01.implementation.AzureNetAppFilesManagementClientImpl;
+import com.microsoft.azure.management.netapp.v2020_09_01.implementation.CapacityPoolInner;
+import com.microsoft.azure.management.netapp.v2020_09_01.implementation.NetAppAccountInner;
+import com.microsoft.azure.management.netapp.v2020_09_01.implementation.VolumeInner;
 import com.microsoft.rest.credentials.ServiceClientCredentials;
-import main.common.ResourceUriUtils;
-import main.common.ServiceCredentialsAuth;
-import main.common.Utils;
+import nfs.sdk.sample.common.ResourceUriUtils;
+import nfs.sdk.sample.common.ServiceCredentialsAuth;
+import nfs.sdk.sample.common.Utils;
 import rx.Observable;
 
 import java.util.concurrent.CompletableFuture;
@@ -127,10 +128,17 @@ public class main {
         //--------------------------------
         Utils.writeConsoleMessage("Authorizing replication in source region...");
         await(Creation.authorizeSourceReplicationAsync(anfClient, primaryResourceGroupName, primaryAnfAccountName, primaryCapacityPoolName, primaryVolumeName, secondaryVolumeId));
+        ResourceUriUtils.WaitForCompleteReplicationStatus(anfClient, secondaryResourceGroupName, secondaryAnfAccountName, secondaryCapacityPoolName, secondaryVolumeName);
         Utils.writeSuccessMessage("Successfully authorized primary volume for data replication");
 
         if(shouldCleanUp)
         {
+            //Break Connection between Source and destination volume
+            await(Cleanup.breakDataReplicationAsync(anfClient,secondaryResourceGroupName,secondaryAnfAccountName, secondaryCapacityPoolName, secondaryVolumeName));
+
+            //Wait for connection to become "Broken"
+            ResourceUriUtils.WaitForBrokenReplicationStatus(anfClient,secondaryResourceGroupName,secondaryAnfAccountName, secondaryCapacityPoolName, secondaryVolumeName);
+
             //Delete replication connection
             await(Cleanup.deleteDataReplicationVolumeAsync(anfClient,secondaryResourceGroupName,secondaryAnfAccountName, secondaryCapacityPoolName, secondaryVolumeName));
 
