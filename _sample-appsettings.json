@@ -1,0 +1,56 @@
+{
+  "general": {
+    "subscriptionId": "<subscriptionId>",
+    "shouldCleanUp": "<true/false>"
+  },
+  "accounts": [
+    {
+      "name": "Anf-Primary-Test-Account",
+      "resourceGroup": "<resourceGroupName>",
+      "location": "westcentralus",
+      "capacityPools": [
+        {
+          "name": "Anf-Primary-Test-Pool",
+          "serviceLevel": "Standard",
+          "size": 4398046511104,
+          "volumes": [
+            {
+              "name": "Anf-Primary-Test-Volume",
+              "creationToken": "Anf-Primary-Test-Volume",
+              "usageThreshold": 107374182400,
+              "type": "NFSv4.1",
+              "subnetId": "<subnetId>",
+              "secondary": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Anf-Secondary-Test-Account",
+      "resourceGroup": "<resourceGroupName>",
+      "location": "westcentralus",
+      "capacityPools": [
+        {
+          "name": "Anf-Secondary-Test-Pool",
+          "serviceLevel": "Standard",
+          "size": 4398046511104,
+          "volumes": [
+            {
+              "name": "Anf-Secondary-Test-Volume",
+              "creationToken": "Anf-Secondary-Test-Volume",
+              "usageThreshold": 107374182400,
+              "type": "NFSv4.1",
+              "subnetId": "<subnetId>",
+              "sourceVolume": {
+                "volumeName": "Anf-Primary-Test-Volume",
+                "poolName": "Anf-Primary-Test-Pool",
+                "accountName": "Anf-Primary-Test-Account"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

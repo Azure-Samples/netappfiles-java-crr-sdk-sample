@@ -1,4 +1,5 @@
-package main.common;// Copyright (c) Microsoft and contributors.  All rights reserved.
+package sdk.sample.common;
+// Copyright (c) Microsoft and contributors.  All rights reserved.
 //
 // This source code is licensed under the MIT license found in the
 // LICENSE file in the root directory of this source tree.
@@ -19,6 +20,16 @@ public class Utils
         System.out.println("Azure NetAppFiles Java SDK Samples - Sample project that performs Data Replication operation with Azure NetApp Files SDK");
         System.out.println("----------------------------------------------------------------------------------------------------------------------------");
         System.out.println("");
+    }
+
+    /**
+     * Create the configuration object containing ANF resource information
+     * @param filename Name of file configuration file
+     * @return Project Configuration as read from the json file
+     */
+    public static ProjectConfiguration getConfiguration(String filename)
+    {
+        return ProjectConfiguration.readFromJsonFile(filename);
     }
 
     /**
