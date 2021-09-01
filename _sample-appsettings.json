@@ -6,7 +6,7 @@
   "accounts": [
     {
       "name": "Anf-Primary-Test-Account",
-      "resourceGroup": "<resourceGroupName>",
+      "resourceGroup": "<primaryResourceGroupName>",
       "location": "westcentralus",
       "capacityPools": [
         {
@@ -20,7 +20,17 @@
               "usageThreshold": 107374182400,
               "type": "NFSv4.1",
               "subnetId": "<subnetId>",
-              "secondary": false
+              "exportPolicies": [
+                {
+                  "ruleIndex": 1,
+                  "allowedClients": "0.0.0.0/0",
+                  "cifs": false,
+                  "nfsv3": false,
+                  "nfsv4": true,
+                  "unixReadOnly": false,
+                  "unixReadWrite": true
+                }
+              ]
             }
           ]
         }
@@ -28,7 +38,7 @@
     },
     {
       "name": "Anf-Secondary-Test-Account",
-      "resourceGroup": "<resourceGroupName>",
+      "resourceGroup": "<secondaryResourceGroupName>",
       "location": "westcentralus",
       "capacityPools": [
         {
@@ -42,10 +52,22 @@
               "usageThreshold": 107374182400,
               "type": "NFSv4.1",
               "subnetId": "<subnetId>",
+              "exportPolicies": [
+                {
+                  "ruleIndex": 1,
+                  "allowedClients": "0.0.0.0/0",
+                  "cifs": false,
+                  "nfsv3": false,
+                  "nfsv4": true,
+                  "unixReadOnly": false,
+                  "unixReadWrite": true
+                }
+              ],
               "sourceVolume": {
                 "volumeName": "Anf-Primary-Test-Volume",
                 "poolName": "Anf-Primary-Test-Pool",
-                "accountName": "Anf-Primary-Test-Account"
+                "accountName": "Anf-Primary-Test-Account",
+                "resourceGroup": "<primaryResourceGroupName>"
               }
             }
           ]
