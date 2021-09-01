@@ -7,6 +7,9 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 import com.azure.resourcemanager.netapp.NetAppFilesManager;
 import sdk.sample.common.ProjectConfiguration;
 import sdk.sample.common.Utils;
+import sdk.sample.model.ModelNetAppAccount;
+
+import java.util.List;
 
 public class main
 {
@@ -33,7 +36,17 @@ public class main
         // Getting project configuration
         ProjectConfiguration config = Utils.getConfiguration("appsettings.json");
         if (config == null)
+        {
+            Utils.writeConsoleMessage("No appsettings.json file found. Exiting.");
             return;
+        }
+
+        List<ModelNetAppAccount> accounts = config.getAccounts();
+        if (config.getAccounts() != null && config.getAccounts().isEmpty())
+        {
+            Utils.writeConsoleMessage("No ANF accounts defined within appsettings.json file. Exiting.");
+            return;
+        }
 
         // Instantiating a new ANF management client and authenticate
         AzureProfile profile = new AzureProfile(AzureEnvironment.AZURE);
@@ -45,19 +58,19 @@ public class main
                 .authenticate(credential, profile);
 
         //--------------------------------
-        // Creating Primary and secondary ANF Resources from appsettings.json
+        // Creating ANF Resources listed in the appsettings.json
         //--------------------------------
-        Creation.createANFResources(config, manager.serviceClient());
+        Creation.createANFResources(accounts, manager.serviceClient());
 
         //--------------------------------
         // Authorize Data Replications from appsettings.json
         //--------------------------------
-        Replication.authorizeReplications(config, manager.serviceClient());
+        Replication.authorizeReplications(accounts, manager.serviceClient());
 
         //--------------------------------
         // Run cleanup if set to true in appsettings.json
         //--------------------------------
         if (config.isShouldCleanUp())
-            Cleanup.runCleanup(config, manager.serviceClient());
+            Cleanup.runCleanup(accounts, manager.serviceClient());
     }
 }

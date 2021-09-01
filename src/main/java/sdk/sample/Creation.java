@@ -5,34 +5,33 @@ import com.azure.resourcemanager.netapp.fluent.models.CapacityPoolInner;
 import com.azure.resourcemanager.netapp.fluent.models.NetAppAccountInner;
 import com.azure.resourcemanager.netapp.fluent.models.VolumeInner;
 import sdk.sample.common.CommonSdk;
-import sdk.sample.common.ProjectConfiguration;
 import sdk.sample.common.Utils;
 import sdk.sample.model.ModelCapacityPool;
 import sdk.sample.model.ModelNetAppAccount;
 import sdk.sample.model.ModelVolume;
 
+import java.util.List;
+
 public class Creation
 {
-    public static void createANFResources(ProjectConfiguration config, NetAppManagementClient anfClient)
+    /**
+     * Create accounts, pools and volumes
+     * @param accounts List of ModelNetAppAccount to process
+     * @param anfClient Azure NetApp Files Management Client
+     */
+    public static void createANFResources(List<ModelNetAppAccount> accounts, NetAppManagementClient anfClient)
     {
         /*
           Creating ANF Accounts
          */
         Utils.writeConsoleMessage("Creating Azure NetApp Files Account(s)...");
-        if (!config.getAccounts().isEmpty())
-        {
-            config.getAccounts().forEach(account -> createAccount(anfClient, account));
-        }
-        else
-        {
-            Utils.writeConsoleMessage("No ANF accounts defined within appsettings.json file. Exiting.");
-        }
+        accounts.forEach(account -> createAccount(anfClient, account));
 
         /*
           Creating Capacity Pools
          */
         Utils.writeConsoleMessage("Creating Capacity Pool(s)...");
-        for (ModelNetAppAccount modelAccount : config.getAccounts())
+        for (ModelNetAppAccount modelAccount : accounts)
         {
             if (!modelAccount.getCapacityPools().isEmpty())
             {
@@ -48,7 +47,7 @@ public class Creation
           Creating Volumes
          */
         Utils.writeConsoleMessage("Creating Volume(s)...");
-        for (ModelNetAppAccount modelAccount : config.getAccounts())
+        for (ModelNetAppAccount modelAccount : accounts)
         {
             if (!modelAccount.getCapacityPools().isEmpty())
             {

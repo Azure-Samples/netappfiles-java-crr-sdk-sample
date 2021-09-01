@@ -11,22 +11,21 @@ import sdk.sample.model.ModelCapacityPool;
 import sdk.sample.model.ModelNetAppAccount;
 import sdk.sample.model.ModelVolume;
 
+import java.util.List;
+
 public class Cleanup {
     /**
      * Breaks and removes Data Replication connection and then deletes all resources -> volumes, pools and accounts
-     * @param config Project Configuration
+     * @param accounts List of ModelNetAppAccount to process
      * @param anfClient Azure NetApp Files Management Client
      */
-    public static void runCleanup(ProjectConfiguration config, NetAppManagementClient anfClient)
+    public static void runCleanup(List<ModelNetAppAccount> accounts, NetAppManagementClient anfClient)
     {
-        if (config == null || config.getAccounts() == null)
-            return;
-
         /*
           Break and remove data replications
          */
         Utils.writeConsoleMessage("Breaking and removing Data Replication(s)...");
-        for (ModelNetAppAccount account : config.getAccounts())
+        for (ModelNetAppAccount account : accounts)
         {
             if (account.getCapacityPools() != null)
             {
@@ -81,7 +80,7 @@ public class Cleanup {
           Clean up volumes
          */
         Utils.writeConsoleMessage("Cleaning up Volume(s)...");
-        for (ModelNetAppAccount account : config.getAccounts())
+        for (ModelNetAppAccount account : accounts)
         {
             if (account.getCapacityPools() != null)
             {
@@ -122,7 +121,7 @@ public class Cleanup {
           Clean up capacity pools
          */
         Utils.writeConsoleMessage("Cleaning up Capacity Pool(s)...");
-        for (ModelNetAppAccount account : config.getAccounts())
+        for (ModelNetAppAccount account : accounts)
         {
             if (account.getCapacityPools() != null)
             {
@@ -153,27 +152,24 @@ public class Cleanup {
           Clean up accounts
          */
         Utils.writeConsoleMessage("Cleaning up Account(s)...");
-        if (config.getAccounts() != null)
+        for (ModelNetAppAccount account : accounts)
         {
-            for (ModelNetAppAccount account : config.getAccounts())
+            String[] parameters = {account.getResourceGroup(), account.getName()};
+            NetAppAccountInner anfAccount = (NetAppAccountInner) CommonSdk.getResource(anfClient, parameters, NetAppAccountInner.class);
+            if (anfAccount != null)
             {
-                String[] parameters = {account.getResourceGroup(), account.getName()};
-                NetAppAccountInner anfAccount = (NetAppAccountInner) CommonSdk.getResource(anfClient, parameters, NetAppAccountInner.class);
-                if (anfAccount != null)
-                {
-                    try
-                    {
-                        anfClient.getAccounts().beginDelete(account.getResourceGroup(), account.getName()).getFinalResult();
-                        CommonSdk.waitForNoANFResource(anfClient, anfAccount.id(), NetAppAccountInner.class);
-                    }
-                    catch (Exception e)
-                    {
-                        Utils.writeErrorMessage("An error occurred while deleting Account: " + anfAccount.id());
-                        Utils.writeConsoleMessage("Error: " + e);
-                        throw e;
-                    }
-                    Utils.writeSuccessMessage("Successfully deleted Account: " + anfAccount.id());
+                try
+            {
+                    anfClient.getAccounts().beginDelete(account.getResourceGroup(), account.getName()).getFinalResult();
+                    CommonSdk.waitForNoANFResource(anfClient, anfAccount.id(), NetAppAccountInner.class);
                 }
+                catch (Exception e)
+                {
+                    Utils.writeErrorMessage("An error occurred while deleting Account: " + anfAccount.id());
+                    Utils.writeConsoleMessage("Error: " + e);
+                    throw e;
+                }
+                Utils.writeSuccessMessage("Successfully deleted Account: " + anfAccount.id());
             }
         }
     }
