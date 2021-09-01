@@ -49,9 +49,6 @@ public class main
         //--------------------------------
         Creation.createANFResources(config, manager.serviceClient());
 
-        // Give resources some time to finish creation
-        Utils.threadSleep(30000);
-
         //--------------------------------
         // Authorize Data Replications from appsettings.json
         //--------------------------------

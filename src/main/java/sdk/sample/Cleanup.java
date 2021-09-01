@@ -59,13 +59,8 @@ public class Cleanup {
 
                                     try
                                     {
-                                        Utils.threadSleep(30000);
                                         anfClient.getVolumes().beginDeleteReplication(account.getResourceGroup(), account.getName(), pool.getName(), volume.getName()).getFinalResult();
                                         CommonSdk.waitForNoReplication(anfClient, account.getResourceGroup(), account.getName(), pool.getName(), volume.getName(), 10, 60);
-
-
-                                        // Wait for volumes to be in Successful state
-                                        CommonSdk.waitForVolumesSuccess(anfClient, account.getResourceGroup(), account.getName(), pool.getName(), volume.getName(), volume.getSourceVolume());
                                         Utils.writeSuccessMessage("Successfully deleted Volume Replication: " + destinationVolume.id());
                                     }
                                     catch (Exception e)
@@ -98,13 +93,16 @@ public class Cleanup {
                         {
                             String[] parameters = {account.getResourceGroup(), account.getName(), pool.getName(), volume.getName()};
                             VolumeInner volumeInner = (VolumeInner) CommonSdk.getResource(anfClient, parameters, VolumeInner.class);
-                            if (volumeInner != null) {
-                                try {
+                            if (volumeInner != null)
+                            {
+                                try
+                                {
                                     anfClient.getVolumes().beginDelete(account.getResourceGroup(), account.getName(), pool.getName(), volume.getName()).getFinalResult();
-
                                     CommonSdk.waitForNoANFResource(anfClient, volumeInner.id(), VolumeInner.class);
                                     Utils.writeSuccessMessage("Successfully deleted Volume: " + volumeInner.id());
-                                } catch (Exception e) {
+                                }
+                                catch (Exception e)
+                                {
                                     Utils.writeErrorMessage("An error occurred while deleting Volume: " + volumeInner.id());
                                     Utils.writeConsoleMessage("Error: " + e);
                                     throw e;
@@ -137,6 +135,7 @@ public class Cleanup {
                         try
                         {
                             anfClient.getPools().beginDelete(account.getResourceGroup(), account.getName(), pool.getName()).getFinalResult();
+                            CommonSdk.waitForNoANFResource(anfClient, capacityPool.id(), CapacityPoolInner.class);
                         }
                         catch (Exception e)
                         {
@@ -144,8 +143,6 @@ public class Cleanup {
                             Utils.writeConsoleMessage("Error: " + e);
                             throw e;
                         }
-
-                        CommonSdk.waitForNoANFResource(anfClient, capacityPool.id(), CapacityPoolInner.class);
                         Utils.writeSuccessMessage("Successfully deleted Capacity Pool: " + capacityPool.id());
                     }
                 }
@@ -167,6 +164,7 @@ public class Cleanup {
                     try
                     {
                         anfClient.getAccounts().beginDelete(account.getResourceGroup(), account.getName()).getFinalResult();
+                        CommonSdk.waitForNoANFResource(anfClient, anfAccount.id(), NetAppAccountInner.class);
                     }
                     catch (Exception e)
                     {
@@ -174,8 +172,6 @@ public class Cleanup {
                         Utils.writeConsoleMessage("Error: " + e);
                         throw e;
                     }
-
-                    CommonSdk.waitForNoANFResource(anfClient, anfAccount.id(), NetAppAccountInner.class);
                     Utils.writeSuccessMessage("Successfully deleted Account: " + anfAccount.id());
                 }
             }

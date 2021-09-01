@@ -183,7 +183,7 @@ public class CommonSdk
     {
         for (int i = 0; i < retries; i++)
         {
-            Utils.threadSleep(intervalInSec*1000);
+            Utils.threadSleep(intervalInSec * 1000);
 
             try
             {
@@ -265,10 +265,10 @@ public class CommonSdk
         {
             try
             {
-                Utils.threadSleep(intervalInSec * 1000);
                 ReplicationStatusInner replicationStatus = anfClient.getVolumes().replicationStatus(resourceGroupName, accountName, poolName, volumeName);
                 if (replicationStatus.mirrorState().toString().equalsIgnoreCase(status))
                     break;
+                Utils.threadSleep(intervalInSec * 1000);
             }
             catch(Exception ex)
             {
@@ -291,51 +291,6 @@ public class CommonSdk
             {
                 if (ex.getMessage().contains("not found"))
                     return; // a not found exception means the replication does not exist any more
-            }
-        }
-    }
-
-    /**
-     * Method to overload function waitForVolumesSuccess(client, string, Sting, Sting, String, ModelSourceVolume, int, int) with default values
-     * @param anfClient Azure NetApp Files Management Client
-     * @param resourceGroupName Resource Group Name
-     * @param accountName Azure NetApp Files Account name
-     * @param poolName Azure NetApp Files Capacity Pool name
-     * @param volumeName Azure NetApp Files Volume name
-     * @param modelSourceVolume The source volume
-     */
-    public static void waitForVolumesSuccess(NetAppManagementClient anfClient, String resourceGroupName, String accountName, String poolName, String volumeName, ModelSourceVolume modelSourceVolume)
-    {
-        waitForVolumesSuccess(anfClient, resourceGroupName, accountName, poolName, volumeName, modelSourceVolume, 10, 60);
-    }
-
-    /**
-     * This function checks the provisioning state of the replication until both are succeeded or polling reached its maximum retries.
-     * @param anfClient Azure NetApp Files Management Client
-     * @param resourceGroupName Resource Group Name
-     * @param accountName Azure NetApp Files Account name
-     * @param poolName Azure NetApp Files Capacity Pool name
-     * @param volumeName Azure NetApp Files Volume name
-     * @param modelSourceVolume The source volume
-     * @param intervalInSec Time in second that the function will poll to see if the resource has been deleted
-     * @param retries The amount of retries
-     */
-    public static void waitForVolumesSuccess(NetAppManagementClient anfClient, String resourceGroupName, String accountName, String poolName, String volumeName, ModelSourceVolume modelSourceVolume, int intervalInSec, int retries)
-    {
-        for (int i = 0; i < retries; i++)
-        {
-            try
-            {
-                Utils.threadSleep(intervalInSec * 1000);
-                VolumeInner sourceVolume = anfClient.getVolumes().get(modelSourceVolume.getResourceGroup(), modelSourceVolume.getAccountName(), modelSourceVolume.getPoolName(), modelSourceVolume.getVolumeName());
-                VolumeInner destinationVolume = anfClient.getVolumes().get(resourceGroupName, accountName, poolName, volumeName);
-                if (sourceVolume.provisioningState().equals("Succeeded") && destinationVolume.provisioningState().equals("Succeeded"))
-                    break;
-            }
-            catch(Exception ex)
-            {
-                Utils.writeWarningMessage(ex.getMessage());
-                break;
             }
         }
     }

@@ -58,16 +58,7 @@ public class Creation
                     {
                         for (ModelVolume modelVolume : capacityPool.getVolumes())
                         {
-                            try
-                            {
-                                createVolume(anfClient, modelAccount, capacityPool, modelVolume);
-                            }
-                            catch (Exception e)
-                            {
-                                Utils.writeErrorMessage("An error occurred while creating volume " + modelAccount.getName() + " " +
-                                        capacityPool.getName() + " " + modelVolume.getName() + ".\nError message: " + e.getMessage());
-                                throw e;
-                            }
+                            createVolume(anfClient, modelAccount, capacityPool, modelVolume);
                         }
                     }
                     else
@@ -92,15 +83,25 @@ public class Creation
         VolumeInner anfVolume = (VolumeInner) CommonSdk.getResource(anfClient, params, VolumeInner.class);
         if (anfVolume == null)
         {
-            VolumeInner sourceVolume = null;
-            if (volume.getSourceVolume() != null)
+            try
             {
-                String[] sourceParams = {volume.getSourceVolume().getResourceGroup(), volume.getSourceVolume().getAccountName(), volume.getSourceVolume().getPoolName(), volume.getSourceVolume().getVolumeName()};
-                sourceVolume = (VolumeInner) CommonSdk.getResource(anfClient, sourceParams, VolumeInner.class);
-            }
+                VolumeInner sourceVolume = null;
+                if (volume.getSourceVolume() != null)
+                {
+                    String[] sourceParams = {volume.getSourceVolume().getResourceGroup(), volume.getSourceVolume().getAccountName(), volume.getSourceVolume().getPoolName(), volume.getSourceVolume().getVolumeName()};
+                    sourceVolume = (VolumeInner) CommonSdk.getResource(anfClient, sourceParams, VolumeInner.class);
+                }
 
-            VolumeInner newVolume = CommonSdk.createOrUpdateVolume(anfClient, account, pool, volume, sourceVolume);
-            Utils.writeSuccessMessage("Volume successfully created, resource id: " + newVolume.id());
+                VolumeInner newVolume = CommonSdk.createOrUpdateVolume(anfClient, account, pool, volume, sourceVolume);
+                Utils.writeSuccessMessage("Volume successfully created, resource id: " + newVolume.id());
+            }
+            catch (Exception e)
+            {
+                Utils.writeErrorMessage("An error occurred while creating volume " + account.getName() + " " +
+                        pool.getName() + " " + volume.getName());
+                Utils.writeConsoleMessage("Error: " + e);
+                throw e;
+            }
         }
         else
         {
@@ -120,8 +121,17 @@ public class Creation
         CapacityPoolInner capacityPool = (CapacityPoolInner) CommonSdk.getResource(anfClient, params, CapacityPoolInner.class);
         if (capacityPool == null)
         {
-            CapacityPoolInner newCapacityPool = CommonSdk.createOrUpdateCapacityPool(anfClient, account.getResourceGroup(), account.getName(), account.getLocation(), pool);
-            Utils.writeSuccessMessage("Capacity Pool successfully created, resource id: " + newCapacityPool.id());
+            try
+            {
+                CapacityPoolInner newCapacityPool = CommonSdk.createOrUpdateCapacityPool(anfClient, account.getResourceGroup(), account.getName(), account.getLocation(), pool);
+                Utils.writeSuccessMessage("Capacity Pool successfully created, resource id: " + newCapacityPool.id());
+            }
+            catch (Exception e)
+            {
+                Utils.writeErrorMessage("An error occurred while creating capacity pool " + account.getName() + " " + pool.getName());
+                Utils.writeConsoleMessage("Error: " + e);
+                throw e;
+            }
         }
         else
         {
@@ -141,8 +151,17 @@ public class Creation
         NetAppAccountInner anfAccount = (NetAppAccountInner) CommonSdk.getResource(anfClient, params, NetAppAccountInner.class);
         if (anfAccount == null)
         {
-            NetAppAccountInner newAccount = CommonSdk.createOrUpdateAccount(anfClient, account);
-            Utils.writeSuccessMessage("Account successfully created, resource id: " + newAccount.id());
+            try
+            {
+                NetAppAccountInner newAccount = CommonSdk.createOrUpdateAccount(anfClient, account);
+                Utils.writeSuccessMessage("Account successfully created, resource id: " + newAccount.id());
+            }
+            catch (Exception e)
+            {
+                Utils.writeErrorMessage("An error occurred while creating account " + account.getName());
+                Utils.writeConsoleMessage("Error: " + e);
+                throw e;
+            }
         }
         else
         {

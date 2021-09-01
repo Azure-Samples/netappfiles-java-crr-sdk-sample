@@ -40,15 +40,19 @@ public class Replication {
                                     Utils.writeConsoleMessage("Destination volume not found to authorize replication.");
                                     return;
                                 }
-                                CommonSdk.authorizeReplication(anfClient, volume.getSourceVolume().getResourceGroup(), volume.getSourceVolume().getAccountName(), volume.getSourceVolume().getPoolName(), volume.getSourceVolume().getVolumeName(), destinationVolume.id());
-
-                                // Wait for volumes to be in Successful state
-                                CommonSdk.waitForVolumesSuccess(anfClient, account.getResourceGroup(), account.getName(), pool.getName(), volume.getName(), volume.getSourceVolume());
-
-                                Utils.threadSleep(30000);
-
-                                // Wait for replication status to be mirrored
-                                CommonSdk.waitForReplicationStatus(anfClient, account.getResourceGroup(), account.getName(), pool.getName(), volume.getName(), "Mirrored");
+                                try
+                                {
+                                    CommonSdk.authorizeReplication(anfClient, volume.getSourceVolume().getResourceGroup(), volume.getSourceVolume().getAccountName(), volume.getSourceVolume().getPoolName(), volume.getSourceVolume().getVolumeName(), destinationVolume.id());
+                                    // Wait for replication status to be mirrored
+                                    CommonSdk.waitForReplicationStatus(anfClient, account.getResourceGroup(), account.getName(), pool.getName(), volume.getName(), "Mirrored");
+                                }
+                                catch (Exception e)
+                                {
+                                    Utils.writeErrorMessage("An error occurred while authorizing data replication: " + destinationVolume.id());
+                                    Utils.writeConsoleMessage("Error: " + e);
+                                    throw e;
+                                }
+                                Utils.writeSuccessMessage("Replication successfully authorized, resource id: " + destinationVolume.id());
                             }
                         }
                     }
