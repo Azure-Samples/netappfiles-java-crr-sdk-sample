@@ -5,6 +5,7 @@
 
 package sdk.sample.common;
 
+import com.azure.core.exception.ResourceNotFoundException;
 import com.azure.resourcemanager.netapp.fluent.NetAppManagementClient;
 import com.azure.resourcemanager.netapp.fluent.models.*;
 import com.azure.resourcemanager.netapp.models.*;
@@ -152,6 +153,10 @@ public class CommonSdk
                             parameters[4]);
             }
         }
+        catch (ResourceNotFoundException e)
+        {
+            return null;
+        }
         catch (Exception e)
         {
             Utils.writeWarningMessage("Error finding resource - " + e.getMessage());
@@ -229,6 +234,26 @@ public class CommonSdk
             catch (Exception e)
             {
                 Utils.writeWarningMessage(e.getMessage());
+                break;
+            }
+        }
+    }
+
+    public static void waitForVolumeSuccess(NetAppManagementClient anfClient, String resourceGroupName, String accountName, String poolName, String volumeName)
+    {
+        waitForVolumeSuccess(anfClient, resourceGroupName, accountName, poolName, volumeName, 10, 60);
+    }
+
+    public static void waitForVolumeSuccess(NetAppManagementClient anfClient, String resourceGroupName, String accountName, String poolName, String volumeName, int intervalInSec, int retries)
+    {
+        for (int i = 0; i < retries; i++) {
+            try {
+                VolumeInner volume = anfClient.getVolumes().get(resourceGroupName, accountName, poolName, volumeName);
+                if (volume.provisioningState().equalsIgnoreCase("Succeeded"))
+                    break;
+                Utils.threadSleep(intervalInSec * 1000);
+            } catch (Exception ex) {
+                Utils.writeWarningMessage(ex.getMessage());
                 break;
             }
         }

@@ -7,7 +7,7 @@
     {
       "name": "Anf-Primary-Test-Account",
       "resourceGroup": "<primaryResourceGroupName>",
-      "location": "westcentralus",
+      "location": "<primaryLocation>",
       "capacityPools": [
         {
           "name": "Anf-Primary-Test-Pool",
@@ -39,7 +39,7 @@
     {
       "name": "Anf-Secondary-Test-Account",
       "resourceGroup": "<secondaryResourceGroupName>",
-      "location": "westcentralus",
+      "location": "<secondaryLocation>",
       "capacityPools": [
         {
           "name": "Anf-Secondary-Test-Pool",

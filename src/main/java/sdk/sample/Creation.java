@@ -92,6 +92,12 @@ public class Creation
                 }
 
                 VolumeInner newVolume = CommonSdk.createOrUpdateVolume(anfClient, account, pool, volume, sourceVolume);
+                if (newVolume == null)
+                {
+                    throw new RuntimeException("Volume ended up in failed state");
+                }
+                // Adding additional wait on volume status succeeded due to occasional delay in resource creation
+                CommonSdk.waitForVolumeSuccess(anfClient, account.getResourceGroup(), account.getName(), pool.getName(), volume.getName());
                 Utils.writeSuccessMessage("Volume successfully created, resource id: " + newVolume.id());
             }
             catch (Exception e)
@@ -123,6 +129,10 @@ public class Creation
             try
             {
                 CapacityPoolInner newCapacityPool = CommonSdk.createOrUpdateCapacityPool(anfClient, account.getResourceGroup(), account.getName(), account.getLocation(), pool);
+                if (newCapacityPool == null)
+                {
+                    throw new RuntimeException("Pool ended up in failed state");
+                }
                 Utils.writeSuccessMessage("Capacity Pool successfully created, resource id: " + newCapacityPool.id());
             }
             catch (Exception e)
@@ -153,6 +163,10 @@ public class Creation
             try
             {
                 NetAppAccountInner newAccount = CommonSdk.createOrUpdateAccount(anfClient, account);
+                if (newAccount == null)
+                {
+                    throw new RuntimeException("Account ended up in failed state");
+                }
                 Utils.writeSuccessMessage("Account successfully created, resource id: " + newAccount.id());
             }
             catch (Exception e)
