@@ -6,6 +6,7 @@
 package sdk.sample.common;
 
 import com.azure.core.exception.ResourceNotFoundException;
+import com.azure.core.management.exception.ManagementException;
 import com.azure.resourcemanager.netapp.fluent.NetAppManagementClient;
 import com.azure.resourcemanager.netapp.fluent.models.*;
 import com.azure.resourcemanager.netapp.models.*;
@@ -153,12 +154,10 @@ public class CommonSdk
                             parameters[4]);
             }
         }
-        catch (ResourceNotFoundException e)
-        {
-            return null;
-        }
         catch (Exception e)
         {
+            if (e.getMessage().contains("Status code 404"))
+                return null;
             Utils.writeWarningMessage("Error finding resource - " + e.getMessage());
         }
         return null;
