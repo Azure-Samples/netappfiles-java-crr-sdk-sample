@@ -98,8 +98,7 @@ public class Creation
                     // make sure appsettings is properly set up and that vnet and subnet is created
                     throw new RuntimeException("Volume ended up in failed state");
                 }
-                // Adding additional wait on volume status succeeded due to occasional delay in resource creation
-                CommonSdk.waitForVolumeSuccess(anfClient, account.getResourceGroup(), account.getName(), pool.getName(), volume.getName());
+                CommonSdk.waitForANFResource(anfClient, newVolume.id(), VolumeInner.class);
                 Utils.writeSuccessMessage("Volume successfully created, resource id: " + newVolume.id());
             }
             catch (Exception e)

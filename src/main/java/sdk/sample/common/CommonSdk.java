@@ -5,8 +5,6 @@
 
 package sdk.sample.common;
 
-import com.azure.core.exception.ResourceNotFoundException;
-import com.azure.core.management.exception.ManagementException;
 import com.azure.resourcemanager.netapp.fluent.NetAppManagementClient;
 import com.azure.resourcemanager.netapp.fluent.models.*;
 import com.azure.resourcemanager.netapp.models.*;
@@ -164,6 +162,81 @@ public class CommonSdk
     }
 
     /**
+     * Method to overload function waitForANFResource(client, string, int, int, clazz) with default values
+     * @param anfClient Azure NetApp Files Management Client
+     * @param resourceId Resource id of the resource that was deleted
+     * @param anfClass Valid class types: NetAppAccountInner, CapacityPoolInner, VolumeInner, SnapshotInner
+     */
+    public static <T> void waitForANFResource(NetAppManagementClient anfClient, String resourceId, Class<T> anfClass)
+    {
+        waitForANFResource(anfClient, resourceId, 10, 60, anfClass);
+    }
+
+    /**
+     * This function checks if a specific ANF resource exists
+     * if the resource is not found or if polling reached its maximum retries, it raise an exception.
+     * @param anfClient Azure NetApp Files Management Client
+     * @param resourceId Resource id of the resource that was deleted
+     * @param intervalInSec Time in second that the function will poll to see if the resource has been deleted
+     * @param retries Number of times polling will be performed
+     * @param clazz Valid class types: NetAppAccountInner, CapacityPoolInner, VolumeInner, SnapshotInner
+     */
+    public static <T> void waitForANFResource(NetAppManagementClient anfClient, String resourceId, int intervalInSec, int retries, Class<T> clazz)
+    {
+        for (int i = 0; i < retries; i++)
+        {
+            Utils.threadSleep(intervalInSec * 1000);
+
+            try
+            {
+                switch (clazz.getSimpleName())
+                {
+                    case "NetAppAccountInner":
+                        NetAppAccountInner account = anfClient.getAccounts().getByResourceGroup(ResourceUriUtils.getResourceGroup(resourceId),
+                                ResourceUriUtils.getAnfAccount(resourceId));
+                        if (account != null && account.provisioningState().equalsIgnoreCase("Succeeded"))
+                            return;
+
+                        continue;
+
+                    case "CapacityPoolInner":
+                        CapacityPoolInner pool = anfClient.getPools().get(ResourceUriUtils.getResourceGroup(resourceId),
+                                ResourceUriUtils.getAnfAccount(resourceId),
+                                ResourceUriUtils.getAnfCapacityPool(resourceId));
+                        if (pool != null && pool.provisioningState().equalsIgnoreCase("Succeeded"))
+                            return;
+
+                        continue;
+
+                    case "VolumeInner":
+                        VolumeInner volume = anfClient.getVolumes().get(ResourceUriUtils.getResourceGroup(resourceId),
+                                ResourceUriUtils.getAnfAccount(resourceId),
+                                ResourceUriUtils.getAnfCapacityPool(resourceId),
+                                ResourceUriUtils.getAnfVolume(resourceId));
+                        if (volume != null && volume.provisioningState().equalsIgnoreCase("Succeeded"))
+                            return;
+
+                        continue;
+
+                    case "SnapshotInner":
+                        SnapshotInner snapshot = anfClient.getSnapshots().get(ResourceUriUtils.getResourceGroup(resourceId),
+                                ResourceUriUtils.getAnfAccount(resourceId),
+                                ResourceUriUtils.getAnfCapacityPool(resourceId),
+                                ResourceUriUtils.getAnfVolume(resourceId),
+                                ResourceUriUtils.getAnfSnapshot(resourceId));
+                        if (snapshot != null && snapshot.provisioningState().equalsIgnoreCase("Succeeded"))
+                            return;
+                }
+            }
+            catch (Exception e)
+            {
+                Utils.writeWarningMessage(e.getMessage());
+                break;
+            }
+        }
+    }
+
+    /**
      * Method to overload function waitForNoANFResource(client, string, int, int, clazz) with default values
      * @param anfClient Azure NetApp Files Management Client
      * @param resourceId Resource id of the resource that was deleted
@@ -233,26 +306,6 @@ public class CommonSdk
             catch (Exception e)
             {
                 Utils.writeWarningMessage(e.getMessage());
-                break;
-            }
-        }
-    }
-
-    public static void waitForVolumeSuccess(NetAppManagementClient anfClient, String resourceGroupName, String accountName, String poolName, String volumeName)
-    {
-        waitForVolumeSuccess(anfClient, resourceGroupName, accountName, poolName, volumeName, 10, 60);
-    }
-
-    public static void waitForVolumeSuccess(NetAppManagementClient anfClient, String resourceGroupName, String accountName, String poolName, String volumeName, int intervalInSec, int retries)
-    {
-        for (int i = 0; i < retries; i++) {
-            try {
-                VolumeInner volume = anfClient.getVolumes().get(resourceGroupName, accountName, poolName, volumeName);
-                if (volume.provisioningState().equalsIgnoreCase("Succeeded"))
-                    break;
-                Utils.threadSleep(intervalInSec * 1000);
-            } catch (Exception ex) {
-                Utils.writeWarningMessage(ex.getMessage());
                 break;
             }
         }
