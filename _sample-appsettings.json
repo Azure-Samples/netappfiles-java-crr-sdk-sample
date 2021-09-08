@@ -1,0 +1,78 @@
+{
+  "general": {
+    "subscriptionId": "<subscriptionId>",
+    "shouldCleanUp": "<true/false>"
+  },
+  "accounts": [
+    {
+      "name": "Anf-Primary-Test-Account",
+      "resourceGroup": "<primaryResourceGroupName>",
+      "location": "<primaryLocation>",
+      "capacityPools": [
+        {
+          "name": "Anf-Primary-Test-Pool",
+          "serviceLevel": "Standard",
+          "size": 4398046511104,
+          "volumes": [
+            {
+              "name": "Anf-Primary-Test-Volume",
+              "creationToken": "Anf-Primary-Test-Volume",
+              "usageThreshold": 107374182400,
+              "type": "NFSv4.1",
+              "subnetId": "<subnetId>",
+              "exportPolicies": [
+                {
+                  "ruleIndex": 1,
+                  "allowedClients": "0.0.0.0/0",
+                  "cifs": false,
+                  "nfsv3": false,
+                  "nfsv4": true,
+                  "unixReadOnly": false,
+                  "unixReadWrite": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Anf-Secondary-Test-Account",
+      "resourceGroup": "<secondaryResourceGroupName>",
+      "location": "<secondaryLocation>",
+      "capacityPools": [
+        {
+          "name": "Anf-Secondary-Test-Pool",
+          "serviceLevel": "Standard",
+          "size": 4398046511104,
+          "volumes": [
+            {
+              "name": "Anf-Secondary-Test-Volume",
+              "creationToken": "Anf-Secondary-Test-Volume",
+              "usageThreshold": 107374182400,
+              "type": "NFSv4.1",
+              "subnetId": "<subnetId>",
+              "exportPolicies": [
+                {
+                  "ruleIndex": 1,
+                  "allowedClients": "0.0.0.0/0",
+                  "cifs": false,
+                  "nfsv3": false,
+                  "nfsv4": true,
+                  "unixReadOnly": false,
+                  "unixReadWrite": true
+                }
+              ],
+              "sourceVolume": {
+                "volumeName": "Anf-Primary-Test-Volume",
+                "poolName": "Anf-Primary-Test-Pool",
+                "accountName": "Anf-Primary-Test-Account",
+                "resourceGroup": "<primaryResourceGroupName>"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

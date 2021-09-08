@@ -1,4 +1,5 @@
 # Specific files to ignore since they might contain sensitive information
+appsettings*.json
 azureauth*.json
 
 # Log file
