@@ -32,13 +32,14 @@ If you don't already have a Microsoft Azure subscription, you can get a FREE tri
 ## Prerequisites
 
 1. This project is built upon Maven, which must be installed in order to run the sample. Instructions on installing Maven can be found on their website [here](https://maven.apache.org/install.html)
-1. Azure subscription
-1. Subscription needs to be whitelisted for Azure NetApp Files. For more information, see
+2. zure subscription
+3. Subscription needs to have Azure NetApp Files resource provider registered. For more information, see [Register for NetApp Resource Provider](https://docs.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-register).
+4. Subscription needs to be whitelisted for Azure NetApp Files. For more information, see
    [Submit a waitlist request for accessing the service](https://docs.microsoft.com/azure/azure-netapp-files/azure-netapp-files-register#waitlist).
-1. Resource Group created
-1. Virtual Network with a delegated subnet to Microsoft.Netapp/volumes resource. For more information, see
+5. Resource Group created.
+6. Virtual Network with a delegated subnet to Microsoft.Netapp/volumes resource. For more information, see
    [Guidelines for Azure NetApp Files network planning](https://docs.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-network-topologies).
-1. For this sample console application to work, authentication is needed. We will use Service Principal based authentication
+7. For this sample console application to work, authentication is needed. We will use Service Principal based authentication
     1. Within an [Azure Cloud Shell](https://docs.microsoft.com/en-us/azure/cloud-shell/quickstart) session, make sure
        you're logged in at the subscription where you want to be associated with the service principal by default:
         ```bash
